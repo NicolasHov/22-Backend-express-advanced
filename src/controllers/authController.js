@@ -46,7 +46,6 @@ export const login = async (req, res, next) => {
         if (!user || !user.password) {
             return next(new McpError(401, 'Invalid credentials'));
         }
-        console.log(user.password);
 
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (!passwordMatch) {
@@ -60,13 +59,13 @@ export const login = async (req, res, next) => {
         );
 
         res.cookie('token', token, {
-            httpOnly: true,
+            httpOnly: true, // pour éviter attaques XSS car évite interprétation JS
             maxAge: 60 * 60 * 1000, // 1 hour
             secure: process.env.NODE_ENV === 'production', // Send cookie over HTTPS only in production
             sameSite: 'strict'
         });
 
-        res.json({ userId: user._id });
+        res.status(201).json({ "message": "User logged in", userId: user._id });
     } catch (err) {
         next(err);
     }
