@@ -1,9 +1,10 @@
-/** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
-    preset: 'ts-jest',
+/** @type {import('jest')} */
+const config = {
+    presets: [['@babel/preset-env', { targets: { node: 'current' } }]],
     testEnvironment: 'node',
     moduleNameMapper: {
         '^@/(.*)$': '<rootDir>/src/$1',
     },
 };
-export {};
+
+export default config;
