@@ -88,6 +88,9 @@ app.use('/api/messages', messageRoutes);
 //     }
 // });
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+if (process.env.NODE_ENV == 'development')
+    app.listen(port, () => {
+        console.log(`Server is running on port ${port}`);
+    });
+
+export { app }
