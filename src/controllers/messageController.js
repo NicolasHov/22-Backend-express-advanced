@@ -1,10 +1,13 @@
 import Message from '../models/message.js';
-import User from '../models/user.js';
+import Lobbies from '../models/lobby.js';
 
-export const getMessages = async (req, res) => {
+export const getAllMessagesFromALobby = async (req, res) => {
     try {
-        const messages = await Message.find();
-        res.status(201).json(messages);
+        const { lobbyId } = req.params
+        const messages = await Message.aggregate([
+            { $match: { lobby: lobbyId } }
+        ]);
+        res.status(200).json(messages);
     } catch (error) {
         res.status(500).send({ error: error.message });
     }

@@ -2,20 +2,24 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import lobbyRoutes from './routes/lobby.js';
-import authRoutes from './routes/auth.js';
-import messageRoutes from './routes/message.js';
-import userRoutes from './routes/user.js';
-import { errorHandler } from './middleware/errorHandler.js';
+import lobbyRoutes from './src/routes/lobby.js';
+import authRoutes from './src/routes/auth.js';
+import messageRoutes from './src/routes/message.js';
+import userRoutes from './src/routes/user.js';
+import { errorHandler } from './src/middleware/errorHandler.js';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
+import bodyParser from "body-parser";
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
 
-const API_URL = `http://localhost:${port}/api/`;
+let API_URL = (process.env.NODE_ENV === "development") ? `http://localhost:${port}/api/` : "https://backend-lokkeroom-inizkw4n4-nicolas17.vercel.app/"
+
+console.log(API_URL);
 
 const options = {
     definition: {
@@ -31,7 +35,7 @@ const options = {
             },
             contact: {
                 name: 'Nicolas Hovart',
-                email: '',
+                email: 'hovart.nicolas@gmail.com',
             },
         },
     },
@@ -43,12 +47,17 @@ const specs = swaggerJsdoc(options);
 app.use(
     cors({
         origin: API_URL,
+        // optionsSuccessStatus: 200,
         credentials: true,
         methods: "GET, POST, PUT, PATCH, DELETE",
         allowedHeaders: "Content-Type, Authorization",
     })
 ); // Enable CORS
-app.use(express.json());
+
+// Middlewares
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(express.json())
+app.use(cookieParser())
 
 // api-docs swaggerUI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
@@ -60,12 +69,23 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/chat_app'
 app.get('/', (req, res) => {
     res.send('Welcome')
 })
+app.use(errorHandler);
+
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/lobbies', lobbyRoutes);
 app.use('/api/messages', messageRoutes);
 
-app.use(errorHandler);
+// app.all('*', (req, res) => {
+//     res.status(404);
+//     if (req.accepts('html')) {
+//         res.sendFile(path.join(__dirname, 'views', '404.html'));
+//     } else if (req.accepts('json')) {
+//         res.json({ "error": "404 Not Found" });
+//     } else {
+//         res.type('txt').send("404 Not Found");
+//     }
+// });
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

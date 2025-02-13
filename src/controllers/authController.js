@@ -58,7 +58,7 @@ export const login = async (req, res, next) => {
             { expiresIn: '1h' }
         );
 
-        res.cookie('token', token, {
+        res.cookie('authcookie', token, {
             httpOnly: true, // pour éviter attaques XSS car évite interprétation JS
             maxAge: 60 * 60 * 1000, // 1 hour
             secure: process.env.NODE_ENV === 'production', // Send cookie over HTTPS only in production

@@ -1,7 +1,7 @@
 import express from 'express';
 import { getLobby, createLobby, addPlayerToLobby } from '../controllers/lobbyController.js';
 import { authMiddleware } from '../middleware/authMiddleware.js';
-import { getMessages, getOneMessage, postMessage } from '../controllers/messageController.js';
+import { getAllMessagesFromALobby, getOneMessage, postMessage } from '../controllers/messageController.js';
 
 const router = express.Router();
 
@@ -96,9 +96,9 @@ router.post('/:lobbyId/players', authMiddleware, addPlayerToLobby);
  *             userId:
  *               type: string
  */
-router.get('/:lobbyId/', authMiddleware, getMessages);
-router.get('/:lobbyId/:messageId', authMiddleware, getOneMessage);
-router.post('/:lobbyId/', authMiddleware, postMessage);
+router.get('/:lobbyId/messages', authMiddleware, getAllMessagesFromALobby);
+router.get('/:lobbyId/messages/:messageId', authMiddleware, getOneMessage);
+router.post('/:lobbyId/messages', authMiddleware, postMessage);
 
 
 export default router;
