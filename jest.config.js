@@ -3,7 +3,7 @@ const config = {
     presets: [['@babel/preset-env', { targets: { node: 'current' } }]],
     testEnvironment: 'node',
     moduleNameMapper: {
-        '^@/(.*)$': '<rootDir>/src/$1',
+        '^@/(.*)$': '<rootDir>/api/$1',
     },
 };
 

@@ -2,10 +2,10 @@
   "name": "express-advanced-test",
   "version": "1.0.0",
   "description": "Repository: `lokkeroom`",
-  "main": "src/index.js",
+  "main": "api/index.js",
   "scripts": {
-    "dev": "nodemon src/index.js",
-    "start": "node src/index.js",
+    "dev": "nodemon api/index.js",
+    "start": "node api/index.js",
     "test": "jest"
   },
   "keywords": [],
