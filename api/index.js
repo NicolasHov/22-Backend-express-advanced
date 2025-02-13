@@ -7,8 +7,8 @@ import authRoutes from './routes/auth.js';
 import messageRoutes from './routes/message.js';
 import userRoutes from './routes/user.js';
 import { errorHandler } from './middleware/errorHandler.js';
-import swaggerUi from 'swagger-ui-express';
-import swaggerJsdoc from 'swagger-jsdoc';
+// import swaggerUi from 'swagger-ui-express';
+// import swaggerJsdoc from 'swagger-jsdoc';
 import bodyParser from "body-parser";
 import cookieParser from 'cookie-parser';
 
@@ -42,7 +42,7 @@ const options = {
     apis: ['./api/routes/*.js'],
 };
 
-const specs = swaggerJsdoc(options);
+// const specs = swaggerJsdoc(options);
 
 app.use(
     cors({
@@ -60,7 +60,7 @@ app.use(express.json())
 app.use(cookieParser())
 
 // api-docs swaggerUI
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
@@ -101,4 +101,4 @@ if (process.env.NODE_ENV == 'development')
         console.log(`Server is running on port ${port}`);
     });
 
-export { app }
+export default app
