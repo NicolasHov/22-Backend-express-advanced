@@ -71,10 +71,10 @@ mongoose.connect(process.env.MONGODB_URI, {
     .catch(err => console.error('MongoDB Connection Error:', err));
 
 app.get('/', (req, res) => {
-    res.send('Welcome')
+    res.json({ message: 'Welcome on lokkeroom' })
 })
 app.get('/api', (req, res) => {
-    res.send('Welcome on API')
+    res.json({ message: 'Welcome on API' })
 })
 
 app.use(errorHandler);
