@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { McpError } from './errorHandler.js';
 
 export const authMiddleware = (req, res, next) => {
-    const authCookie = req.cookies['authcookie'];
+    const authCookie = req.cookies['vercel_jwe'];
 
     if (!authCookie) {
         return next(new McpError(401, 'Not authenticated'));

@@ -54,15 +54,15 @@ export const login = async (req, res, next) => {
 
         const token = jwt.sign(
             { userId: user._id, email: user.email },
-            process.env.JWT_SECRET || 'supersecretkey',
+            process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
 
-        res.cookie('authcookie', token, {
-            httpOnly: true, // pour éviter attaques XSS car évite interprétation JS
-            maxAge: 60 * 60 * 1000, // 1 hour
+        res.cookie('vercel_jwe', token, {
+            domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : 'localhost', // Automatically adjust for production or local            maxAge: 60 * 60 * 1000, // 1 hour
+            httpOnly: true,             // Prevent access via JavaScript (security)
             secure: process.env.NODE_ENV === 'production', // Send cookie over HTTPS only in production
-            sameSite: 'strict'
+            sameSite: 'Strict'          // Define SameSite policy
         });
 
         res.status(201).json({ "message": "User logged in", userId: user._id });
