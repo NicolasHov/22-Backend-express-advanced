@@ -17,7 +17,7 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-let API_URL = (process.env.NODE_ENV === "development") ? `http://localhost:${port}/api/` : "https://backend-lokkeroom-inizkw4n4-nicolas17.vercel.app/"
+let API_URL = (process.env.NODE_ENV === "development") ? `http://localhost:${port}/api/` : "https://backend-lokkeroom.vercel.app/"
 
 console.log(API_URL);
 
