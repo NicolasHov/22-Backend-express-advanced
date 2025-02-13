@@ -66,7 +66,6 @@ mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     serverSelectionTimeoutMS: 5000, // Timeout after 5s
-    keepAlive: true, // Helps with maintaining long-lived connections
 })
     .then(() => console.log('MongoDB Connected!'))
     .catch(err => console.error('MongoDB Connection Error:', err));
@@ -74,6 +73,10 @@ mongoose.connect(process.env.MONGODB_URI, {
 app.get('/', (req, res) => {
     res.send('Welcome')
 })
+app.get('/api', (req, res) => {
+    res.send('Welcome on API')
+})
+
 app.use(errorHandler);
 
 

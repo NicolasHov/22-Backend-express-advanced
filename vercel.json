@@ -29,17 +29,6 @@
                 "DELETE",
                 "OPTIONS"
             ]
-        },
-        {
-            "src": "/redirect",
-            "status": 308,
-            "headers": {
-                "Location": "https://www.google.com/"
-            }
-        },
-        {
-            "src": "/legacy",
-            "status": 404
         }
     ]
 }
