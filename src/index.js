@@ -62,7 +62,12 @@ app.use(cookieParser())
 // api-docs swaggerUI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/chat_app')
+mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000, // Timeout after 5s
+    keepAlive: true, // Helps with maintaining long-lived connections
+})
     .then(() => console.log('MongoDB Connected!'))
     .catch(err => console.error('MongoDB Connection Error:', err));
 
