@@ -12,7 +12,7 @@
             "headers": [
                 {
                     "key": "Content-Security-Policy",
-                    "value": "default-src 'self'; img-src 'self' https://backend-lokkeroom-5y7575faz-nicolas17.vercel.app; script-src 'self' 'unsafe-inline';"
+                    "value": "default-src 'self'; img-src 'self' https://backend-lokkeroom-5y7575faz-nicolas17.vercel.app; script-src 'self' 'unsafe-inline'; script-src-elem 'self' 'unsafe-inline';"
                 }
             ]
         }
