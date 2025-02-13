@@ -1,11 +1,5 @@
 # Lokkeroom
 
-- Repository: `lokkeroom`
-- Type of Challenge: `Consolidation`
-- Duration: `5 days`
-- Deployment strategy : `Heroku`
-- Team challenge : `solo`
-
 > Real gossips are spread in the locker room!
 
 ## Mission objectives
@@ -16,7 +10,7 @@ All information has to be stored in a MongoDB (or PostgreSQL or Mysql(MariaDB)) 
 
 All the below features have to be implemented in the form of a REST API, this API should only return JSON not HTML!
 
-### 🌱 Must have features
+### 🌱DONE
 
 - Users can sign up using an email and a password
 - Users can log in using their email and password
@@ -25,14 +19,11 @@ All the below features have to be implemented in the form of a REST API, this AP
 - Users can post message on their lobby
 - Users can edit their own message
 
-### 🌼 Nice to have features (doable)
+### 🌼 TODO
 
 - Admin can delete message in their lobby
 - Admin can edit message in their lobby
 - Implement a pagination system
-
-### 🌳 Nice to haves (hard)
-
 - Users can join multiple teams
 - Implement a direct message system (user to user message)
 - Try to implement Anti-bruteforce (ex: people cannot attempt more than 5 failed logins/hour)
@@ -58,6 +49,3 @@ Here is an example of the endpoints you could implement.
 | /api/lobby/[message-id]                 | PATCH  | yes           | (yes)\*\*  | An object containing the message patches     | Edit a message. Users can only edit their own messages, unless they are admins.                                       |
 | /api/messages/[message-id]                 | DELETE | yes           | (yes)\*\*  | -                                            | Delete a message. Users can only edit their own messages, unless they are admins.                                     |
 
-Good luck!
-
-![Locker room](./locker-room.gif)
