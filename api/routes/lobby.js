@@ -1,5 +1,5 @@
 import express from 'express';
-import { getLobby, createLobby, addPlayerToLobby } from '../controllers/lobbyController.js';
+import { getAllLobbies, addPlayerToLobby, createLobbyWithMessages } from '../controllers/lobbyController.js';
 import { authMiddleware } from '../middleware/authMiddleware.js';
 import { getAllMessagesFromALobby, getOneMessage, postMessage } from '../controllers/messageController.js';
 
@@ -47,8 +47,8 @@ const router = express.Router();
  *               lobbyId:
  *                 type: string
  */
-router.get('/', getLobby);
-router.post('/', authMiddleware, createLobby);
+router.get('/', getAllLobbies);
+router.post('/', authMiddleware, createLobbyWithMessages);
 router.post('/:lobbyId/players', authMiddleware, addPlayerToLobby);
 
 /**
