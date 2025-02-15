@@ -5,12 +5,20 @@ import { McpError } from '../middleware/errorHandler.js';
 import mongoose from 'mongoose';
 
 export const getAllLobbies = async (req, res, next) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
     try {
         const lobbies = await Lobby.find()
-            .populate('messages')
+            // .populate('messages')
+            .session(session);
         res.status(201).json(lobbies);
+        await session.commitTransaction();
     } catch (err) {
+        await session.abortTransaction();
         next(err);
+    } finally {
+        session.endSession();
     }
 }
 
@@ -18,13 +26,16 @@ export const addPlayerToLobby = async (req, res, next) => {
     const { lobbyId } = req.params;
     const { playerId } = req.body;
 
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
     try {
-        const lobby = await Lobby.findById(lobbyId);
+        const lobby = await Lobby.findById(lobbyId).session(session);
         if (!lobby) {
             return next(new McpError(404, 'Lobby not found'));
         }
 
-        const player = await User.findById(playerId);
+        const player = await User.findById(playerId).session(session);
         if (!player) {
             return next(new McpError(404, 'Player not found'));
         }
@@ -34,10 +45,14 @@ export const addPlayerToLobby = async (req, res, next) => {
         }
 
         lobby.players.push(playerId);
-        await lobby.save();
+        await lobby.save({ session });
+        await session.commitTransaction();
         res.json({ message: 'Player added to lobby!', lobby });
     } catch (err) {
+        await session.abortTransaction();
         next(err);
+    } finally {
+        session.endSession();
     }
 };
 
@@ -65,16 +80,16 @@ export const createLobbyWithMessages = async (req, res, next) => {
             for (const messageData of req.body.messages) {
                 const message = new Message({
                     player: coachId, // Assuming the coach is sending the first message
-                    lobby: lobby._id,
+                    lobbyId: lobby._id,
                     content: messageData.content
                 });
                 await message.save({ session });
             }
         }
-
+        // await Lobby.populate('author')
         await session.commitTransaction();
         res.status(201).json({ message: 'Lobby and messages created!', lobbyId: lobby._id });
-        console.log(lobby) // debug
+        console.log(lobby) // debug for messages
 
     } catch (error) {
         await session.abortTransaction();
@@ -83,5 +98,3 @@ export const createLobbyWithMessages = async (req, res, next) => {
         session.endSession();
     }
 };
-
-

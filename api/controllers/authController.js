@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { validationResult } from 'express-validator';
 import { McpError } from '../middleware/errorHandler.js';
+import mongoose from 'mongoose';
 
 export const register = async (req, res, next) => {
     const errors = validationResult(req);
@@ -12,8 +13,11 @@ export const register = async (req, res, next) => {
 
     const { username, email, password } = req.body;
 
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
     try {
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findOne({ email }).session(session);
         if (existingUser) {
             return next(new McpError(409, 'Email already exists'));
         }
@@ -26,10 +30,14 @@ export const register = async (req, res, next) => {
             password: hashedPassword,
         });
 
-        await user.save();
+        await user.save({ session });
+        await session.commitTransaction();
         res.status(201).json({ message: 'User registered!', userId: user._id });
     } catch (err) {
+        await session.abortTransaction();
         next(err);
+    } finally {
+        session.endSession();
     }
 };
 
@@ -41,8 +49,11 @@ export const login = async (req, res, next) => {
 
     const { email, password } = req.body;
 
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
     try {
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email }).session(session);
         if (!user || !user.password) {
             return next(new McpError(401, 'Invalid credentials'));
         }
@@ -65,8 +76,12 @@ export const login = async (req, res, next) => {
             sameSite: 'Strict'          // Define SameSite policy
         });
 
+        await session.commitTransaction();
         res.status(201).json({ "message": "User logged in", userId: user._id });
     } catch (err) {
+        await session.abortTransaction();
         next(err);
+    } finally {
+        session.endSession();
     }
 };

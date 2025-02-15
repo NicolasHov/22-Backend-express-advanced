@@ -1,29 +1,31 @@
 import Message from '../models/message.js';
-import Lobbies from '../models/lobby.js';
+import mongoose from 'mongoose';
 
 export const getAllMessagesFromALobby = async (req, res) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
     try {
         const { lobbyId } = req.params
-        const messages = await Message.aggregate([
-            { $match: { lobby: lobbyId } }
-        ]);
+        // const messages = await Message.aggregate([
+        //     { $match: { lobbyId } }
+        // ])
+        const messages = await Message.find({ lobbyId })
+            .session(session);
         res.status(200).json(messages);
+        await session.commitTransaction();
     } catch (error) {
+        await session.abortTransaction();
         res.status(500).send({ error: error.message });
-    }
-};
-
-export const getOneMessage = async (req, res) => {
-    try {
-        const { lobbyId, messageId } = req.params
-        let message = await Message.findOne({ messageId });
-        res.status(201).json(message);
-    } catch (error) {
-        res.status(500).send({ error: error.message });
+    } finally {
+        session.endSession();
     }
 };
 
 export const postMessage = async (req, res) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
     try {
         const { lobbyId } = req.params
         const playerId = req.userId;
@@ -31,13 +33,17 @@ export const postMessage = async (req, res) => {
 
         const message = new Message({
             player: playerId,
-            lobby: lobbyId,
+            lobbyId,
             content
         });
 
-        await message.save();
+        await message.save({ session });
+        await session.commitTransaction();
         res.status(201).json({ message: 'Message created!', messageId: message._id });
     } catch (error) {
+        await session.abortTransaction();
         res.status(500).send({ error: error.message });
+    } finally {
+        session.endSession();
     }
 };

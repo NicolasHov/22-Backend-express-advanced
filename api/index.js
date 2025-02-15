@@ -84,7 +84,7 @@ app.use(errorHandler);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/lobbies', lobbyRoutes);
-app.use('/api/messages', messageRoutes);
+app.use('/api/lobbies', messageRoutes);
 
 // Catch-all route
 app.all('*', (req, res) => {
