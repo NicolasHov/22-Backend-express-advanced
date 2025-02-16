@@ -16,11 +16,6 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
-let API_URL = ""
-
-if (process.env.NODE_ENV === "development") API_URL = `http://localhost:${port}/api/`
-
-console.log(API_URL);
 
 const options = {
     definition: {
@@ -47,7 +42,7 @@ const options = {
 
 app.use(
     cors({
-        origin: API_URL,
+        origin: 'http://127.0.0.1:5173/',
         // optionsSuccessStatus: 200,
         credentials: true,
         methods: "GET, POST, PUT, PATCH, DELETE",
