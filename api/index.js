@@ -2,11 +2,13 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import helmet from 'helmet';
 import lobbyRoutes from './routes/lobby.js';
 import authRoutes from './routes/auth.js';
 import messageRoutes from './routes/message.js';
 import userRoutes from './routes/user.js';
 import { errorHandler } from './middleware/errorHandler.js';
+
 // import swaggerUi from 'swagger-ui-express';
 // import swaggerJsdoc from 'swagger-jsdoc';
 import bodyParser from "body-parser";
@@ -40,15 +42,15 @@ const options = {
 
 // const specs = swaggerJsdoc(options);
 
-app.use(
-    cors({
-        origin: 'http://127.0.0.1:5173/',
-        // optionsSuccessStatus: 200,
-        credentials: true,
-        methods: "GET, POST, PUT, PATCH, DELETE",
-        allowedHeaders: "Content-Type, Authorization",
-    })
-); // Enable CORS
+const corsOptions = {
+    origin: ['http://127.0.0.1:5173', 'https://backend-lokkeroom.vercel.app'],
+    credentials: true,
+    methods: "GET, POST, PUT, PATCH, DELETE",
+    allowedHeaders: "Content-Type, Authorization",
+}
+
+app.use(cors(corsOptions)); // Enable CORS
+app.use(helmet())
 
 // Middlewares
 app.use(bodyParser.urlencoded({ extended: true }))
