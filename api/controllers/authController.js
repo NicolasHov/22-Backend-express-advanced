@@ -77,7 +77,7 @@ export const login = async (req, res, next) => {
         });
 
         await session.commitTransaction();
-        res.status(201).json({ "message": "User logged in", userId: user._id });
+        res.status(200).json({ "message": "User logged in", userId: user._id });
     } catch (err) {
         await session.abortTransaction();
         next(err);
