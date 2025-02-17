@@ -32,7 +32,7 @@ export const register = async (req, res, next) => {
 
         await user.save({ session });
         await session.commitTransaction();
-        res.status(201).json({ message: 'User registered!', userId: user._id });
+        res.status(201).json({ "isRegistered": true, message: 'User registered!' });
     } catch (err) {
         await session.abortTransaction();
         next(err);
@@ -77,7 +77,7 @@ export const login = async (req, res, next) => {
         });
 
         await session.commitTransaction();
-        res.status(200).json({ "isConnected": true, "message": "User logged in", userId: user._id });
+        res.status(200).json({ "isConnected": true, "message": "User logged in" });
     } catch (err) {
         await session.abortTransaction();
         next(err);
