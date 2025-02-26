@@ -73,7 +73,7 @@ export const login = async (req, res, next) => {
             domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : 'localhost', // Automatically adjust for production or local            maxAge: 60 * 60 * 1000, // 1 hour
             httpOnly: true,             // Prevent access via JavaScript (security)
             secure: process.env.NODE_ENV === 'production', // Send cookie over HTTPS only in production
-            sameSite: 'Strict'          // Define SameSite policy
+            sameSite: 'None'          // Define SameSite policy
         });
 
         await session.commitTransaction();
